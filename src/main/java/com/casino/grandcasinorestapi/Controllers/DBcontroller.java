@@ -2,6 +2,7 @@ package com.casino.grandcasinorestapi.Controllers;
 
 import com.casino.grandcasinorestapi.Models.Cliente;
 import com.casino.grandcasinorestapi.Models.messajes;
+import com.casino.grandcasinorestapi.Models.usuarios;
 
 import java.sql.*;
 
@@ -71,6 +72,34 @@ public class DBcontroller {
         }
         msj.messaje="ok";
         msj.state="success";
+        return msj;
+    }
+
+
+    public messajes allowUser(usuarios user) {
+        msj = new messajes();
+        PreparedStatement ps;
+        String sql;
+        try {
+
+            sql = "select password from usuarios where usuario='"+user.usuario.toUpperCase()+"'";
+            ps = DBcontroller(1).prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            if(result.next()) {
+                if (result.getString(1).toUpperCase().equals(user.contrasena)) {
+                    msj.messaje = "ok";
+                    msj.state = "success";
+                    return msj;
+                }
+            }
+
+        } catch (SQLException e) {
+            msj.messaje=e.getMessage();
+            msj.state="error";
+            return msj;
+        }
+        msj.messaje="Usuario o contraseña incorrectos!";
+        msj.state="error";
         return msj;
     }
 

@@ -6,6 +6,7 @@ public class messajes {
    public String messaje;
    public String state;
 
+
    /*
    error
    info
