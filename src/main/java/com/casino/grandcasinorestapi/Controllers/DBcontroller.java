@@ -5,6 +5,8 @@ import com.casino.grandcasinorestapi.Models.messajes;
 import com.casino.grandcasinorestapi.Models.usuarios;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DBcontroller {
 
@@ -101,6 +103,27 @@ public class DBcontroller {
         msj.messaje="Usuario o contraseña incorrectos!";
         msj.state="error";
         return msj;
+    }
+
+    public ArrayList<String> getClientes(){
+        PreparedStatement ps;
+        String sql;
+        ArrayList<String> clientes = new ArrayList<String>();
+        try {
+
+            sql = "select Nombre from clientes;";
+            ps = DBcontroller(1).prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while(result.next()) {
+                clientes.add(result.getString(1));
+            }
+
+        } catch (SQLException e) {
+
+
+        }
+
+       return clientes;
     }
 
 

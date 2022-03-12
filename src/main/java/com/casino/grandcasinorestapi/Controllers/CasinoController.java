@@ -4,6 +4,8 @@ import com.casino.grandcasinorestapi.Models.Cliente;
 import com.casino.grandcasinorestapi.Models.messajes;
 import com.casino.grandcasinorestapi.Models.usuarios;
 
+import java.util.ArrayList;
+
 public class CasinoController {
 DBcontroller database = new DBcontroller();
 
@@ -17,5 +19,9 @@ DBcontroller database = new DBcontroller();
 
     public messajes loggIn(usuarios user){
         return database.allowUser(user);
+    }
+
+    public ArrayList<String> obtenerClientes(){
+        return database.getClientes();
     }
 }

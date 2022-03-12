@@ -39,4 +39,11 @@ public class RestClientes {
 
         return casino.comprobarNombre(cliente.Nombre);
     }
+
+    @GetMapping("/getclientes" )
+    @ResponseBody
+    public ArrayList<String> getClientes(){
+
+        return casino.obtenerClientes();
+    }
 }
