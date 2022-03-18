@@ -1,6 +1,7 @@
 package com.casino.grandcasinorestapi.Controllers;
 
 import com.casino.grandcasinorestapi.Models.Cliente;
+import com.casino.grandcasinorestapi.Models.Jugada;
 import com.casino.grandcasinorestapi.Models.messajes;
 import com.casino.grandcasinorestapi.Models.usuarios;
 
@@ -21,7 +22,11 @@ DBcontroller database = new DBcontroller();
         return database.allowUser(user);
     }
 
-    public ArrayList<String> obtenerClientes(){
+    public ArrayList<Cliente> obtenerClientes(){
         return database.getClientes();
+    }
+
+    public messajes guardarJugadas(ArrayList<Jugada> jugadas){
+        return database.guardarJugadas(jugadas);
     }
 }

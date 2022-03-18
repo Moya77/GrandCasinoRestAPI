@@ -1,6 +1,7 @@
 package com.casino.grandcasinorestapi.Controllers;
 
 import com.casino.grandcasinorestapi.Models.Cliente;
+import com.casino.grandcasinorestapi.Models.Jugada;
 import com.casino.grandcasinorestapi.Models.messajes;
 import com.casino.grandcasinorestapi.Models.usuarios;
 
@@ -105,26 +106,53 @@ public class DBcontroller {
         return msj;
     }
 
-    public ArrayList<String> getClientes(){
+    public ArrayList<Cliente> getClientes(){
         PreparedStatement ps;
         String sql;
-        ArrayList<String> clientes = new ArrayList<String>();
+        ArrayList<Cliente> clientes = new ArrayList<Cliente>();
         try {
 
-            sql = "select Nombre from clientes;";
+            sql = "select id_cliente, Nombre from clientes;";
             ps = DBcontroller(1).prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while(result.next()) {
-                clientes.add(result.getString(1));
+              int id = result.getInt(1);
+
+                clientes.add(new Cliente(result.getInt(1),result.getString(2),"",""
+                ,0,"",""));
             }
 
         } catch (SQLException e) {
 
-
+        String error = e.getMessage();
         }
 
        return clientes;
     }
+
+public messajes guardarJugadas(ArrayList<Jugada> jugadas){
+    msj = new messajes();
+    PreparedStatement ps;
+    String sql;
+    try {
+        for (Jugada jugada: jugadas) {
+            sql = "insert into jugadas(id_cliente, juego, droped, resultado, fecha)" +
+                    "values ('" + jugada.idJugador.toUpperCase() + "','" + jugada.Juego.toUpperCase() + "'," + jugada.Drop +
+                    "," + jugada.Resultado + ",'"+jugada.Fecha+"')";
+            ps = DBcontroller(1).prepareStatement(sql);
+            ps.execute();
+        }
+
+
+    } catch (SQLException e) {
+        msj.messaje=e.getMessage();
+        msj.state="error";
+        return msj;
+    }
+    msj.messaje="El registro se agregó de forma exitosa!";
+    msj.state="success";
+    return msj;
+}
 
 
 }

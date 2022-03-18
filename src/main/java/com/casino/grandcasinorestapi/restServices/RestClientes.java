@@ -2,6 +2,7 @@ package com.casino.grandcasinorestapi.restServices;
 
 import com.casino.grandcasinorestapi.Controllers.CasinoController;
 import com.casino.grandcasinorestapi.Models.Cliente;
+import com.casino.grandcasinorestapi.Models.Jugada;
 import com.casino.grandcasinorestapi.Models.messajes;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,8 +43,16 @@ public class RestClientes {
 
     @GetMapping("/getclientes" )
     @ResponseBody
-    public ArrayList<String> getClientes(){
+    public ArrayList<Cliente> getClientes(){
 
         return casino.obtenerClientes();
+
+    }
+
+    @PostMapping("/guardarJugadas" )
+    @ResponseBody
+    public messajes guardarJugadas(@RequestBody ArrayList<Jugada> jugadas){
+
+    return casino.guardarJugadas(jugadas);
     }
 }
