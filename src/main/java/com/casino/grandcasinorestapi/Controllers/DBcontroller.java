@@ -1,12 +1,12 @@
 package com.casino.grandcasinorestapi.Controllers;
 
-import com.casino.grandcasinorestapi.Models.Cliente;
-import com.casino.grandcasinorestapi.Models.Jugada;
-import com.casino.grandcasinorestapi.Models.messajes;
-import com.casino.grandcasinorestapi.Models.usuarios;
+import com.casino.grandcasinorestapi.Models.*;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DBcontroller {
@@ -153,6 +153,51 @@ public messajes guardarJugadas(ArrayList<Jugada> jugadas){
     msj.state="success";
     return msj;
 }
+// ************************************generar consolidado por juegos*********************************************
+
+    public ArrayList<Jugada> obtenerJudadasPorFechas(String fechaIni, String fechaFin){
+
+        PreparedStatement ps;
+        String sql;
+        ArrayList<Jugada> jugadas = new ArrayList<Jugada>();
+
+        try {
 
 
+
+
+            sql = "select * from jugadas where fecha BETWEEN '"+fechaIni+"' and '"+fechaFin+"';";
+            ps = DBcontroller(1).prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            while(result.next()) {
+               jugadas.add(new Jugada(result.getString(1),getNameById(Integer.parseInt(result.getString(1))),result.getString(2),
+                       result.getInt(3),result.getInt(4),result.getDate(5).toString()));
+
+            }
+
+        } catch (SQLException e) {
+
+            String error = e.getMessage();
+        }
+
+        return jugadas;
+    }
+
+    public String getNameById(int id){
+        PreparedStatement ps;
+        String sql;
+        try {
+
+            sql = "select Nombre from clientes where id_cliente="+id+";";
+            ps = DBcontroller(1).prepareStatement(sql);
+            ResultSet result = ps.executeQuery();
+            result.next();
+            return result.getString(1);
+        } catch (SQLException e) {
+
+            String error = e.getMessage();
+        }
+
+        return "";
+    }
 }

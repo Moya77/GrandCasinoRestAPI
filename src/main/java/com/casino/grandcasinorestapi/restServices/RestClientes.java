@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -54,5 +55,14 @@ public class RestClientes {
     public messajes guardarJugadas(@RequestBody ArrayList<Jugada> jugadas){
 
     return casino.guardarJugadas(jugadas);
+    }
+
+    @GetMapping("/genConsolidado" )
+    @ResponseBody
+    public HashMap genConsolidado(){
+
+    HashMap resultado = casino.genInformConsolidadoJuegos("2022-03-17","2022-03-18");
+        return resultado;
+
     }
 }
