@@ -1,15 +1,14 @@
 package com.casino.grandcasinorestapi.Models;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ConsolidadoClientesXJue {
+public class ConsolidadoClientesXJueConstruct {
 
     public String Cliente;
     public HashMap consolidadoJuegos;
 
-    public ConsolidadoClientesXJue(){}
-    public ConsolidadoClientesXJue(String cliente, HashMap consolidadoJuegos){
+    public ConsolidadoClientesXJueConstruct(){}
+    public ConsolidadoClientesXJueConstruct(String cliente, HashMap consolidadoJuegos){
 
         this.Cliente=cliente;
         this.consolidadoJuegos=consolidadoJuegos;

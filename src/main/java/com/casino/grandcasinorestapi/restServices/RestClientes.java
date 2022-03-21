@@ -1,14 +1,10 @@
 package com.casino.grandcasinorestapi.restServices;
 
 import com.casino.grandcasinorestapi.Controllers.CasinoController;
-import com.casino.grandcasinorestapi.Models.Cliente;
-import com.casino.grandcasinorestapi.Models.Jugada;
-import com.casino.grandcasinorestapi.Models.messajes;
+import com.casino.grandcasinorestapi.Models.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 
 @RestController
@@ -62,6 +58,9 @@ public class RestClientes {
     public HashMap genConsolidado(){
 
     HashMap resultado = casino.genInformConsolidadoJuegos("2022-03-17","2022-03-18");
+
+
+
         return resultado;
 
     }

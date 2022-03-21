@@ -3,8 +3,6 @@ package com.casino.grandcasinorestapi.Controllers;
 import com.casino.grandcasinorestapi.Models.*;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 
 public class CasinoController {
@@ -31,7 +29,7 @@ DBcontroller database = new DBcontroller();
     }
 
     public HashMap genInformConsolidadoJuegos(String fechaIni, String fechaFin){
-        ConsolidadoClientesXJue consolidado = null;
+        ConsolidadoClientesXJueConstruct consolidado = null;
         ConsolidadoJuego newConsolid = null;
         ArrayList<Jugada> jugadas = database.obtenerJudadasPorFechas(fechaIni,fechaFin);
 
@@ -43,7 +41,7 @@ DBcontroller database = new DBcontroller();
             addConsolidadoJugador(consolidado,clientesConsolidados,jugada,newConsolid);
 
         }else{
-            clientesConsolidados.put(jugada.idJugador,new ConsolidadoClientesXJue(getNameById(Integer.parseInt(jugada.idJugador)),new HashMap()));
+            clientesConsolidados.put(jugada.idJugador,new ConsolidadoClientesXJueConstruct(getNameById(Integer.parseInt(jugada.idJugador)),new HashMap()));
             addConsolidadoJugador(consolidado,clientesConsolidados,jugada,newConsolid);
         }
 
@@ -51,8 +49,8 @@ DBcontroller database = new DBcontroller();
         return clientesConsolidados;
     }
 
-    public void addConsolidadoJugador(ConsolidadoClientesXJue consolidado,HashMap clientesConsolidados,Jugada jugada, ConsolidadoJuego newConsolid) {
-        consolidado = (ConsolidadoClientesXJue) clientesConsolidados.get(jugada.idJugador);
+    public void addConsolidadoJugador(ConsolidadoClientesXJueConstruct consolidado, HashMap clientesConsolidados, Jugada jugada, ConsolidadoJuego newConsolid) {
+        consolidado = (ConsolidadoClientesXJueConstruct) clientesConsolidados.get(jugada.idJugador);
         clientesConsolidados.remove(jugada.idJugador);
         if(consolidado.consolidadoJuegos.containsKey(jugada.Juego)){
             newConsolid =(ConsolidadoJuego) consolidado.consolidadoJuegos.get(jugada.Juego);
