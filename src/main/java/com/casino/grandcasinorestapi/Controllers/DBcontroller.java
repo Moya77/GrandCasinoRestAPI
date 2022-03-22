@@ -14,20 +14,30 @@ public class DBcontroller {
     public static final String URL = "jdbc:mysql://localhost:3306/grandcasino";
     public static final String USER = "root";
     public static final String CLAVE = "";
+    Connection con = null;
 
     private messajes msj;
     public DBcontroller(){}
 
-    public Connection DBcontroller(int indent) {
-        Connection con = null;
+    public void openConxion() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = (Connection) DriverManager.getConnection(URL, USER, CLAVE);
-            String result = "conexion realizada";
+
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-        return con;
+
+    }
+
+    public void closeConexion(){
+        try {
+            if (!con.isClosed()) {
+                con.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public messajes saveCliente(Cliente cliente) {
@@ -35,20 +45,24 @@ public class DBcontroller {
         PreparedStatement ps;
         String sql;
         try {
-
+        openConxion();
             sql = "insert into clientes(Nombre, Nacionalidad, Telefono, Edad, Correo, Genero)" +
                     "values ('" + cliente.Nombre.toUpperCase() + "','" + cliente.Nacionalidad.toUpperCase() + "','" + cliente.Telefono +
                     "','" + cliente.Edad + "','" + cliente.Correo + "','"+cliente.Genero+"')";
-            ps = DBcontroller(1).prepareStatement(sql);
+            ps = con.prepareStatement(sql);
             ps.execute();
+
+
 
         } catch (SQLException e) {
             msj.messaje=e.getMessage();
             msj.state="error";
+            closeConexion();
             return msj;
         }
         msj.messaje="El registro se agregó de forma exitosa!";
         msj.state="success";
+        closeConexion();
       return msj;
     }
 
@@ -57,24 +71,27 @@ public class DBcontroller {
         PreparedStatement ps;
         String sql;
         try {
-
+            openConxion();
             sql = "select Nombre from clientes where Nombre='"+Name.toUpperCase()+"'";
-            ps = DBcontroller(1).prepareStatement(sql);
+            ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
 
             if (result.next()){
                 msj.messaje="Ya existe un usuario registrado con este nombre, aun asi desea agregarlo?";
                 msj.state="question";
+                closeConexion();
                return msj;
             }
 
         } catch (SQLException e) {
             msj.messaje=e.getMessage();
             msj.state="error";
+            closeConexion();
             return msj;
         }
         msj.messaje="ok";
         msj.state="success";
+        closeConexion();
         return msj;
     }
 
@@ -84,14 +101,15 @@ public class DBcontroller {
         PreparedStatement ps;
         String sql;
         try {
-
+                openConxion();
             sql = "select password from usuarios where usuario='"+user.usuario.toUpperCase()+"'";
-            ps = DBcontroller(1).prepareStatement(sql);
+            ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             if(result.next()) {
                 if (result.getString(1).toUpperCase().equals(user.contrasena)) {
                     msj.messaje = "ok";
                     msj.state = "success";
+                    closeConexion();
                     return msj;
                 }
             }
@@ -99,10 +117,12 @@ public class DBcontroller {
         } catch (SQLException e) {
             msj.messaje=e.getMessage();
             msj.state="error";
+            closeConexion();
             return msj;
         }
         msj.messaje="Usuario o contraseña incorrectos!";
         msj.state="error";
+        closeConexion();
         return msj;
     }
 
@@ -111,9 +131,10 @@ public class DBcontroller {
         String sql;
         ArrayList<Cliente> clientes = new ArrayList<Cliente>();
         try {
+            openConxion();
 
             sql = "select id_cliente, Nombre from clientes;";
-            ps = DBcontroller(1).prepareStatement(sql);
+            ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while(result.next()) {
               int id = result.getInt(1);
@@ -126,7 +147,7 @@ public class DBcontroller {
 
         String error = e.getMessage();
         }
-
+        closeConexion();
        return clientes;
     }
 
@@ -135,11 +156,12 @@ public messajes guardarJugadas(ArrayList<Jugada> jugadas){
     PreparedStatement ps;
     String sql;
     try {
+        openConxion();
         for (Jugada jugada: jugadas) {
             sql = "insert into jugadas(id_cliente, juego, droped, resultado, fecha)" +
                     "values ('" + jugada.idJugador.toUpperCase() + "','" + jugada.Juego.toUpperCase() + "'," + jugada.Drop +
                     "," + jugada.Resultado + ",'"+jugada.Fecha+"')";
-            ps = DBcontroller(1).prepareStatement(sql);
+            ps = con.prepareStatement(sql);
             ps.execute();
         }
 
@@ -147,10 +169,12 @@ public messajes guardarJugadas(ArrayList<Jugada> jugadas){
     } catch (SQLException e) {
         msj.messaje=e.getMessage();
         msj.state="error";
+        closeConexion();
         return msj;
     }
     msj.messaje="El registro se agregó de forma exitosa!";
     msj.state="success";
+    closeConexion();
     return msj;
 }
 // ************************************generar consolidado por juegos*********************************************
@@ -164,10 +188,10 @@ public messajes guardarJugadas(ArrayList<Jugada> jugadas){
         try {
 
 
-
+            openConxion();
 
             sql = "select * from jugadas where fecha BETWEEN '"+fechaIni+"' and '"+fechaFin+"';";
-            ps = DBcontroller(1).prepareStatement(sql);
+            ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             while(result.next()) {
                jugadas.add(new Jugada(result.getString(1),getNameById(Integer.parseInt(result.getString(1))),result.getString(2),
@@ -179,7 +203,7 @@ public messajes guardarJugadas(ArrayList<Jugada> jugadas){
 
             String error = e.getMessage();
         }
-
+        closeConexion();
         return jugadas;
     }
 
@@ -187,12 +211,14 @@ public messajes guardarJugadas(ArrayList<Jugada> jugadas){
         PreparedStatement ps;
         String sql;
         try {
-
+            openConxion();
             sql = "select Nombre from clientes where id_cliente="+id+";";
-            ps = DBcontroller(1).prepareStatement(sql);
+            ps = con.prepareStatement(sql);
             ResultSet result = ps.executeQuery();
             result.next();
-            return result.getString(1);
+            String resultado =result.getString(1);
+            closeConexion();
+            return resultado;
         } catch (SQLException e) {
 
             String error = e.getMessage();

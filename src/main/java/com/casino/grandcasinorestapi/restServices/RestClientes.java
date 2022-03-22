@@ -13,6 +13,7 @@ import java.util.List;
 public class RestClientes {
 
     CasinoController casino = new CasinoController();
+    ArrayList<ConsolidadoJuego> temporalList;
 
 
 @GetMapping("/getName")
@@ -53,15 +54,38 @@ public class RestClientes {
     return casino.guardarJugadas(jugadas);
     }
 
-    @GetMapping("/genConsolidado" )
+    @PostMapping("/genConsolidado" )
     @ResponseBody
-    public HashMap genConsolidado(){
+    public ArrayList<ConsolidadoInforme> genConsolidado(@RequestParam String fechainicio, @RequestParam String fechafinal){
 
-    HashMap resultado = casino.genInformConsolidadoJuegos("2022-03-17","2022-03-18");
+    temporalList = new ArrayList<>();
+    ArrayList<ConsolidadoInforme> informe = new ArrayList<>();
+
+    HashMap resultado = casino.genInformConsolidadoJuegos(fechainicio,fechafinal);
+
+        Set<String> keySet = resultado.keySet();
+        ArrayList<String> listOfKeys = new ArrayList<String>(keySet);
+        Collection<ConsolidadoClientesXJueConstruct> values = resultado.values();
+
+        ArrayList<ConsolidadoClientesXJueConstruct> listOfValues = new ArrayList<ConsolidadoClientesXJueConstruct>(values);
+
+        for(int i=0; i<listOfValues.size();i++){
+            ConsolidadoInforme consolidado = new ConsolidadoInforme();
+
+            consolidado.Cliente = listOfValues.get(i).Cliente;
+
+            Set<String> keySet2 = listOfValues.get(i).consolidadoJuegos.keySet();
+            ArrayList<String> listOfKeys2 = new ArrayList<String>(keySet2);
+            Collection<ConsolidadoJuego> values2 = listOfValues.get(i).consolidadoJuegos.values();
+            ArrayList<ConsolidadoJuego> listOfValues2 = new ArrayList<ConsolidadoJuego>(values2);
+
+            consolidado.consolidadoJuegos = listOfValues2;
+
+            informe.add(consolidado);
+        }
 
 
-
-        return resultado;
+        return informe;
 
     }
 }

@@ -4,7 +4,8 @@ public class ConsolidadoJuego {
 
 
 
-    public String juego;
+    public String Cliente;
+    public String Juego;
     public int dropMesAnte;
     public int resultMesAnte;
     public int dropMesActu;
@@ -12,8 +13,8 @@ public class ConsolidadoJuego {
 
     public ConsolidadoJuego(){}
 
-    public ConsolidadoJuego(String juego,int dropMesAnte,int resultMesAnte, int dropMesActu,int resultMesActu){
-        this.juego=juego;
+    public ConsolidadoJuego( String juego,int dropMesAnte,int resultMesAnte, int dropMesActu,int resultMesActu){
+        this.Juego =juego;
         this.dropMesAnte=dropMesAnte;
         this.resultMesAnte=resultMesAnte;
         this.dropMesActu=dropMesActu;
