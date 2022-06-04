@@ -15,6 +15,12 @@ public class RestClientes {
     CasinoController casino = new CasinoController();
     ArrayList<ConsolidadoJuego> temporalList;
 
+    @GetMapping("/")
+    public String init(){
+
+        return "this works";
+    }
+
 
 @GetMapping("/getName")
     public List<Object> getName(){
@@ -86,6 +92,15 @@ public class RestClientes {
 
 
         return informe;
+
+    }
+
+
+    @PostMapping("/genConsolidadoClientes" )
+    @ResponseBody
+    public ArrayList<consolidadoCliente> genConsolidadoClientes(@RequestParam String fechainicio, @RequestParam String fechafinal){
+        ArrayList<consolidadoCliente> consolidado = casino.genInformConsolidadoClientes(fechainicio,fechafinal);
+        return consolidado;
 
     }
 }
